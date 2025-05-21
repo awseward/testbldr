@@ -1,0 +1,8 @@
+---
+version: 1.3.0
+title: snapshot: 3 is odd
+---
+dict.from_list([
+  #("is odd", "True"),
+  #("n", "3"),
+])

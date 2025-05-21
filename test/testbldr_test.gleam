@@ -1,6 +1,10 @@
-import testbldr
-import gleam/list
+import birdie
+import gleam/dict
 import gleam/int
+import gleam/list
+import gleam/string
+import pprint
+import testbldr
 
 pub fn main() {
   let test_runner =
@@ -8,15 +12,37 @@ pub fn main() {
     |> testbldr.include_passing_tests_in_output(True)
     |> testbldr.output_results_to_stdout()
 
-  let tests = {
-    use n <- list.map([1, 3, 5, 8, 9])
-    use <- testbldr.named(int.to_string(n) <> " is odd")
-    case n % 2 == 1 {
-      True -> testbldr.Pass
-      False -> testbldr.Fail(int.to_string(n) <> " is even, not odd")
-    }
-  }
+  let tests =
+    list.flatten([
+      is_odd_tests(),
+      //
+      snapshot_tests(),
+    ])
 
   test_runner
   |> testbldr.run(tests)
+}
+
+fn is_odd_tests() {
+  use n <- list.map([1, 3, 5, 8, 9])
+  use <- testbldr.named(int.to_string(n) <> " is odd")
+  case n % 2 == 1 {
+    True -> testbldr.Pass
+    False -> testbldr.Fail(int.to_string(n) <> " is even, not odd")
+  }
+}
+
+fn snapshot_tests() {
+  use n <- list.map([1, 3, 5, 8, 9])
+  let title = "snapshot: " <> int.to_string(n) <> " is odd"
+
+  use <- testbldr.named(title)
+  dict.from_list([
+    #("n", int.to_string(n)),
+    #("is odd", string.inspect({ n % 2 == 1 })),
+  ])
+  |> pprint.format
+  |> birdie.snap(title)
+
+  testbldr.Pass
 }
