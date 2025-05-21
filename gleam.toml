@@ -14,4 +14,4 @@ dev-dependencies = { gleeunit = "~> 1.0", gleam_json = "~> 0.7"}
 [dependencies]
 gleam_stdlib = "~> 0.34 or ~> 1.0"
 gleam_erlang = "~> 0.23"
-simplifile = "~> 1.0"
+simplifile = "~> 2.0"
