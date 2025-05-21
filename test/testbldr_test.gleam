@@ -35,14 +35,18 @@ fn is_odd_tests() {
 fn snapshot_tests() {
   use n <- list.map([1, 3, 5, 8, 9])
   let title = "snapshot: " <> int.to_string(n) <> " is odd"
-
   use <- testbldr.named(title)
+  use <- snap(title)
+
   dict.from_list([
     #("n", int.to_string(n)),
     #("is odd", string.inspect({ n % 2 == 1 })),
   ])
   |> pprint.format
-  |> birdie.snap(title)
+}
 
+fn snap(title: String, f: fn() -> String) {
+  birdie.snap(f(), title)
+  // Always a Pass here because birdie fails by panicking, not a Result
   testbldr.Pass
 }
